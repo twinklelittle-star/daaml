@@ -1,0 +1,28 @@
+def fractional_knapsack(weights, values, capacity):
+    n = len(weights)
+    ratio = []
+    for i in range(n):
+        ratio.append((values[i] / weights[i], weights[i], values[i]))
+    ratio.sort(reverse=True)
+    total_value = 0
+    for r, weight, value in ratio:
+        if capacity >= weight:
+            capacity -= weight
+            total_value += value
+            print("Weight =", weight, "Value =", value, "Fraction = 1")
+        else:
+            fraction = capacity / weight
+            total_value += value * fraction
+            print("Weight =", weight, "Value =", value, "Fraction =", fraction)
+            break
+    print("\nMaximum Profit =", total_value)
+n = int(input("Enter number of items: "))
+weights = []
+values = []
+for i in range(n):
+    w = float(input("Enter weight of item " + str(i + 1) + ": "))
+    v = float(input("Enter value of item " + str(i + 1) + ": "))
+    weights.append(w)
+    values.append(v)
+capacity = float(input("Enter knapsack capacity: "))
+fractional_knapsack(weights, values, capacity)
