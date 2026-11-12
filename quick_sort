@@ -1,0 +1,41 @@
+import random
+import time
+dc = 0
+rc = 0
+def quick_sort(a, low, high, random_pivot=False):
+    global dc, rc
+    if low < high:
+        if random_pivot:
+            p = random.randint(low, high)
+            a[p], a[high] = a[high], a[p]
+        pivot = a[high]
+        i = low - 1
+        for j in range(low, high):
+            if random_pivot:
+                rc += 1
+            else:
+                dc += 1
+            if a[j] <= pivot:
+                i += 1
+                a[i], a[j] = a[j], a[i]
+        a[i + 1], a[high] = a[high], a[i + 1]
+        p = i + 1
+        quick_sort(a, low, p - 1, random_pivot)
+        quick_sort(a, p + 1, high, random_pivot)
+n = int(input("Enter number of elements: "))
+a = list(map(int, input("Enter elements: ").split()))
+b = a.copy()
+c = a.copy()
+start = time.perf_counter_ns()
+quick_sort(b, 0, n - 1)
+t1 = time.perf_counter_ns() - start
+start = time.perf_counter_ns()
+quick_sort(c, 0, n - 1, True)
+t2 = time.perf_counter_ns() - start
+print("\nOriginal Array:", a)
+print("\nDeterministic Quick Sort:", b)
+print("Comparisons:", dc)
+print("Execution Time:", t1, "ns")
+print("\nRandomized Quick Sort:", c)
+print("Comparisons:", rc)
+print("Execution Time:", t2, "ns")
