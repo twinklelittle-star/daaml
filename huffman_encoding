@@ -1,42 +1,33 @@
 text = input("Enter text: ")
 frequency = {}
 for ch in text:
-    if ch in frequency:
-        frequency[ch] += 1
-    else:
-        frequency[ch] = 1
-nodes = []
-for ch in frequency:
-    nodes.append([frequency[ch], ch, None, None])
-while len(nodes) > 1:
-    nodes.sort()
-    left = nodes.pop(0)
-    right = nodes.pop(0)
-    new_node = [
-        left[0] + right[0],
-        None,
-        left,
-        right
-    ]
-    nodes.append(new_node)
-root = nodes[0]
-huffman_code = {}
-stack = [(root, "")]
-while stack:
-    node, code = stack.pop()
-    if node[1] != None:
-        huffman_code[node[1]] = code
-    else:
-        stack.append((node[2], code + "0"))
-        stack.append((node[3], code + "1"))
-print("\nCharacter  Frequency  Huffman Code")
-for ch in frequency:
-    if huffman_code[ch] == "":
-        huffman_code[ch] = "0"
-    print(ch, "         ", frequency[ch], "       ", huffman_code[ch])
-
-encoded_text = ""
-for ch in text:
-    encoded_text += huffman_code[ch]
-print("\nOriginal Text:", text)
-print("Encoded Text:", encoded_text)
+    frequency[ch] = frequency.get(ch, 0) + 1
+if not text:
+    print("Please enter some text.")
+else:
+    nodes = []
+    for ch in frequency:
+        nodes.append([frequency[ch], ch, None, None])
+    while len(nodes) > 1:
+        nodes.sort(key=lambda x: (x[0], str(x[1])))
+        left = nodes.pop(0)
+        right = nodes.pop(0)
+        new_node = [left[0] + right[0], None, left, right]
+        nodes.append(new_node)
+    huffman_code = {}
+    stack = [(nodes[0], "")]
+    while stack:
+        node, code = stack.pop()
+        if node[1] is not None:
+            huffman_code[node[1]] = code if code else "0"
+        else:
+            stack.append((node[3], code + "1"))
+            stack.append((node[2], code + "0"))
+    print("\nCharacter  Frequency  Huffman Code")
+    for ch in frequency:
+        print(ch, "         ", frequency[ch], "       ", huffman_code[ch])
+    encoded_text = ""
+    for ch in text:
+        encoded_text += huffman_code[ch]
+    print("\nOriginal Text:", text)
+    print("Encoded Text:", encoded_text)
