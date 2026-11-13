@@ -1,0 +1,63 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+// Defining a contract
+contract MyContract {
+
+    address private owner;
+
+    // Constructor
+    constructor() {
+        owner = msg.sender;
+    }
+
+    // Get the owner's address
+    function getOwner()
+        public
+        view
+        returns (address)
+    {
+        return owner;
+    }
+
+    // Get the owner's wallet balance
+    function getbalance()
+        public
+        view
+        returns (uint256)
+    {
+        return owner.balance;
+    }
+
+    // Get the contract balance
+    function getContractBalance()
+        public
+        view
+        returns (uint256)
+    {
+        return address(this).balance;
+    }
+
+    // Deposit exactly 2 Ether
+    function deposit()
+        external
+        payable
+    {
+        require(
+            msg.value == 2 ether,
+            "Please send two ethers"
+        );
+    }
+
+    // Withdraw money (owner only)
+    function withdraw()
+        external
+    {
+        require(
+            msg.sender == owner,
+            "Only owner can withdraw"
+        );
+
+        payable(owner).transfer(address(this).balance);
+    }
+}
